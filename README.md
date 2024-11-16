@@ -1,0 +1,2 @@
+# 2024AIFakeFace
+基于resnet50+CrossScanVisionTransformer的AI生成人脸图像鉴别
