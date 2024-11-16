@@ -363,3 +363,17 @@ criterion = nn.CrossEntropyLoss(weight=class_weights)
 ## 6 结论
 
 ​	本文提出了一种基于改进的ResNet50和ViT的多尺度人脸识别模型。通过引入空洞卷积和ASPP模块，模型能够有效地捕获多尺度的特征信息。改进的ViT模块通过Cross Scan操作和特征融合机制，增强了模型对全局和多方向特征的捕获能力。多组消融实验验证了各个模块对模型性能的贡献。实验结果表明，该模型在复杂的人脸识别任务中取得了优异的性能，具有较高的实际应用价值。
+
+## 参考文献
+
+[1] He X, Cao K, Yan K, et al. Pan-mamba: Effective pan-sharpening with state space model[J]. arXiv preprint arXiv:2402.12192, 2024.
+
+[2] Yu, F., & Koltun, V. (2016). Multi-Scale Context Aggregation by Dilated Convolutions. *International Conference on Learning Representations*.
+
+[3] Chen, L. C., Papandreou, G., Kokkinos, I., Murphy, K., & Yuille, A. L. (2017). Deeplab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs. *IEEE Transactions on Pattern Analysis and Machine Intelligence*, 40(4), 834–848.
+
+[4] Dosovitskiy, A., Beyer, L., Kolesnikov, A., et al. (2020). An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale. *arXiv preprint arXiv:2010.11929*.
+
+[5] Hu, J., Shen, L., & Sun, G. (2018). Squeeze-and-Excitation Networks. *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition*, 7132–7141.
+
+[6] Loshchilov, I., & Hutter, F. (2019). Decoupled Weight Decay Regularization. *International Conference on Learning Representations*.
