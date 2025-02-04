@@ -325,7 +325,7 @@ The experimental results demonstrate that the introduction of dilated convolutio
 
     This paper proposes a multi-scale face recognition model based on improved ResNet50 and ViT. By introducing dilated convolution and the ASPP module, the model can effectively capture multi-scale feature information. The improved ViT module enhances the model's ability to capture global and multi-directional features through the Cross Scan operation and feature fusion mechanism. Multiple sets of ablation experiments verify the contribution of each module to the model's performance. Experimental results show that this model has achieved excellent performance in complex face recognition tasks and has high practical application value.
 
-## References
+## 6 References
 
 [1] He X, Cao K, Yan K, et al. Pan-mamba: Effective pan-sharpening with state space model[J]. arXiv preprint arXiv:2402.12192, 2024.
 
@@ -341,5 +341,5 @@ The experimental results demonstrate that the introduction of dilated convolutio
 
 [7] Zhu L, Liao B, Zhang Q, et al. Vision mamba: Efficient visual representation learning with bidirectional state space model[J]. arXiv preprint arXiv:2401.09417, 2024.
 
-##Supplementary Note
+## 7 Supplementary Note
     This work advanced to the national finals of the 2024 Sixth Global Campus Artificial Intelligence Algorithm Elite Competition. However, due to a submission error—only the official test set results were submitted, while the code and weights were not successfully uploaded—the final outcome was less than satisfactory. The code and weights are now open-sourced here as a cautionary reference.
