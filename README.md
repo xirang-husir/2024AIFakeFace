@@ -2,13 +2,13 @@
 
 ## Abstract
 
-    This paper proposes a hybrid model for multi-scale face recognition based on the combination of ResNet50 and an improved Vision Transformer (ViT). By introducing ViT on the basis of ResNet50 to capture the global dependencies of images and improving ViT. To extract deep-level features, dilated convolution and the ASPP module are introduced to capture multi-scale information of images. Finally, the SE channel attention mechanism is used to fuse features. We conducted multiple sets of ablation experiments to verify the impact of each module on model performance. The experimental results show that this model has achieved excellent performance in complex face recognition tasks.
+  This paper proposes a hybrid model for multi-scale face recognition based on the combination of ResNet50 and an improved Vision Transformer (ViT). By introducing ViT on the basis of ResNet50 to capture the global dependencies of images and improving ViT. To extract deep-level features, dilated convolution and the ASPP module are introduced to capture multi-scale information of images. Finally, the SE channel attention mechanism is used to fuse features. We conducted multiple sets of ablation experiments to verify the impact of each module on model performance. The experimental results show that this model has achieved excellent performance in complex face recognition tasks.
 
 **keywords**：ResNet50, Vision Transformer, ASPP, Dilated convolution, SE, Face recognition
 
 ## 1 Introduction
 
-​	As an important research direction in the field of computer vision, face recognition is widely used in fields such as security monitoring, identity verification, and human-computer interaction. However, due to factors such as illumination changes, pose changes, and occlusion, the face recognition task still faces many challenges. The rise of deep learning provides new ideas for solving these problems. Convolutional neural networks (CNNs) perform excellently in extracting local features, while the self-attention mechanism has advantages in capturing global dependencies. How to effectively combine these two methods to build a high-performance face recognition model is a current research hotspot.
+​  As an important research direction in the field of computer vision, face recognition is widely used in fields such as security monitoring, identity verification, and human-computer interaction. However, due to factors such as illumination changes, pose changes, and occlusion, the face recognition task still faces many challenges. The rise of deep learning provides new ideas for solving these problems. Convolutional neural networks (CNNs) perform excellently in extracting local features, while the self-attention mechanism has advantages in capturing global dependencies. How to effectively combine these two methods to build a high-performance face recognition model is a current research hotspot.
 
 ​	Based on ResNet50, this approach combines an improved ViT model, introduces dilated convolution and ASPP modules, and uses the SE channel attention mechanism for feature fusion to propose a new face recognition model. Through multiple sets of ablation experiments, the contributions of each module to the model performance are verified. This model makes full use of local and global feature information and improves the accuracy of face recognition.
 
@@ -16,33 +16,33 @@
 
 ### 2.1 ResNet50
 
-​	ResNet [1] successfully trained neural networks with a depth of 152 layers by introducing a residual structure. ResNet50 is one of the classic network structures with strong feature extraction capabilities. Its residual module enables the network to train more effectively and extract image features at a deeper level.
+​  ResNet [1] successfully trained neural networks with a depth of 152 layers by introducing a residual structure. ResNet50 is one of the classic network structures with strong feature extraction capabilities. Its residual module enables the network to train more effectively and extract image features at a deeper level.
 
 ### 2.2 Dilated convolution and ASPP
 
-​	Dilated convolutions [2] expand the receptive field without increasing the number of parameters by introducing holes (dilations) into the convolutional kernel. The ASPP (Atrous Spatial Pyramid Pooling) module [3] combines dilated convolutions with different dilation rates, enabling the capture of multi-scale contextual information and enhancing the model's ability to recognize objects of varying scales.
+​  Dilated convolutions [2] expand the receptive field without increasing the number of parameters by introducing holes (dilations) into the convolutional kernel. The ASPP (Atrous Spatial Pyramid Pooling) module [3] combines dilated convolutions with different dilation rates, enabling the capture of multi-scale contextual information and enhancing the model's ability to recognize objects of varying scales.
 
 ### 2.3 Vision Transformer (ViT)
 
-​	ViT [4] introduces the Transformer architecture into the field of computer vision by dividing an image into fixed-size patches, which are then flattened into a sequence and fed into the Transformer. ViT has achieved performance comparable to or even better than CNNs in image classification tasks, demonstrating the effectiveness of the self-attention mechanism in visual tasks.
+​  ViT [4] introduces the Transformer architecture into the field of computer vision by dividing an image into fixed-size patches, which are then flattened into a sequence and fed into the Transformer. ViT has achieved performance comparable to or even better than CNNs in image classification tasks, demonstrating the effectiveness of the self-attention mechanism in visual tasks.
 
 ### 2.4 SE Channel attention mechanism
 
-​	The Squeeze-and-Excitation (SE) network [5] introduces a channel attention mechanism that adaptively assigns weights to each channel, enhancing the representation of important features while suppressing irrelevant ones, thereby improving the overall performance of the model.
+​  The Squeeze-and-Excitation (SE) network [5] introduces a channel attention mechanism that adaptively assigns weights to each channel, enhancing the representation of important features while suppressing irrelevant ones, thereby improving the overall performance of the model.
 
 ## 3 Method
 
 ### 3.1 Overview of model architecture
 
-​	First, the input image passes through the convolutional and pooling layers of ResNet50 to extract preliminary features. Then, a Bottleneck module with dilated convolutions is introduced to expand the receptive field and extract deeper features. Next, the ASPP module is used to capture multi-scale contextual information. Subsequently, an improved ViT module is employed to capture global dependencies, and a multi-directional serialized input along with a novel feature fusion mechanism is introduced to process multi-directional inputs. Finally, the SE channel attention mechanism is applied to fuse the features, and the classification result is output through a fully connected layer.
+​  First, the input image passes through the convolutional and pooling layers of ResNet50 to extract preliminary features. Then, a Bottleneck module with dilated convolutions is introduced to expand the receptive field and extract deeper features. Next, the ASPP module is used to capture multi-scale contextual information. Subsequently, an improved ViT module is employed to capture global dependencies, and a multi-directional serialized input along with a novel feature fusion mechanism is introduced to process multi-directional inputs. Finally, the SE channel attention mechanism is applied to fuse the features, and the classification result is output through a fully connected layer.
 
 ### 3.2 ResNet50 and dilated convolution
 
-​	ResNet50 is composed of multiple Bottleneck modules, each containing three convolutional layers. To expand the receptive field, we introduced dilated convolutions in the third and fourth stages of ResNet50, setting the stride of some convolutional layers to 1 and the dilation rate to a custom value. This approach allows for an enlarged receptive field and the acquisition of more contextual information without increasing the number of parameters.
+​  ResNet50 is composed of multiple Bottleneck modules, each containing three convolutional layers. To expand the receptive field, we introduced dilated convolutions in the third and fourth stages of ResNet50, setting the stride of some convolutional layers to 1 and the dilation rate to a custom value. This approach allows for an enlarged receptive field and the acquisition of more contextual information without increasing the number of parameters.
 
 ### 3.3 ASPP moudle
 
-The ASPP module is composed of multiple atrous convolutions with different dilation rates and a global average pooling layer, including:
+  The ASPP module is composed of multiple atrous convolutions with different dilation rates and a global average pooling layer, including:
 
 - ** 1 × 1 convolution with expansion rate of 1 **
 - ** 3 × 3 convolution with expansion rate of 3 **
@@ -50,7 +50,7 @@ The ASPP module is composed of multiple atrous convolutions with different dilat
 - ** 3 × 3 convolution with expansion rate of 7 **
 - ** Global Average Pooling Layer **
 
-The outputs of each branch are concatenated in the channel dimension, and then fused through 1×1 convolution and Batch Normalization. Finally, it passes through the ReLU activation function. The ASPP module can effectively capture features of different scales and improve the model's ability to recognize multi-scale targets.
+  The outputs of each branch are concatenated in the channel dimension, and then fused through 1×1 convolution and Batch Normalization. Finally, it passes through the ReLU activation function. The ASPP module can effectively capture features of different scales and improve the model's ability to recognize multi-scale targets.
 
 ```python
 class ASPP(nn.Module):
@@ -92,7 +92,7 @@ class ASPP(nn.Module):
 
 The traditional Vision Transformer (ViT) mainly has the following disadvantages when processing images.
 
-1. ** Insufficient direction invariance **: When traditional ViT divides the image into fixed-size patches and serializes them in row priority order, it lacks sufficient robustness to the direction changes such as rotation and flip of the image. This is in practical applications, especially in facial recognition tasks, face images with various poses and angles may be encountered, and traditional ViT is difficult to effectively cope with these changes.
+** Insufficient direction invariance **: When traditional ViT divides the image into fixed-size patches and serializes them in row priority order, it lacks sufficient robustness to the direction changes such as rotation and flip of the image. This is in practical applications, especially in facial recognition tasks, face images with various poses and angles may be encountered, and traditional ViT is difficult to effectively cope with these changes.
 
 
 In order to solve the above problems, we introduce the ** Cross Scan ** operation to transform the feature map in multiple directions, including:
@@ -118,7 +118,7 @@ In order to solve the above problems, we introduce the ** Cross Scan ** operatio
        return torch.stack(directions, dim=1) 
    ```
 
-Through this multi-directional serialization approach, the model is capable of capturing feature information of images from various perspectives, thereby enhancing robustness to directional changes. Moreover, multi-directional serialized inputs can effectively increase the diversity and richness of features, addressing the shortcomings of traditional Vision Transformers (ViT) in terms of directional invariance and feature fusion.
+  Through this multi-directional serialization approach, the model is capable of capturing feature information of images from various perspectives, thereby enhancing robustness to directional changes. Moreover, multi-directional serialized inputs can effectively increase the diversity and richness of features, addressing the shortcomings of traditional Vision Transformers (ViT) in terms of directional invariance and feature fusion.
 
 ```reStructuredText
 We embed ViT in the middle layer. After the model extracts local features, it captures global relationships and enhances the features through deep convolution. Efficiency: Compared with embedding ViT in shallow layers, this method reduces the amount of computation while retaining enough feature representation capabilities.
@@ -174,7 +174,7 @@ After obtaining the feature sequences of the four directions, we need to fuse th
   - If $i\ neq i_ {\ text {max}} $, then multiply the feature in that direction by the corresponding weight and add it up, i.e. $fused\ _x += w_c [:, i , :] * x_c [:, i,:] $.
 Ultimately, the fused feature is expressed as $[B, C] $.
 
-​	The core idea of this fusion strategy is to highlight the most important directional features while retaining useful information in other directions. Through the adaptive weight allocation of FeatureFusion, the model can automatically learn the importance of each direction, enhancing the robustness and discriminative power of feature representation.
+​  The core idea of this fusion strategy is to highlight the most important directional features while retaining useful information in other directions. Through the adaptive weight allocation of FeatureFusion, the model can automatically learn the importance of each direction, enhancing the robustness and discriminative power of feature representation.
 
 **code implementation**：
 
@@ -200,17 +200,17 @@ class FeatureFusion(nn.Module):
         return fused_x  # [B, C]
 ```
 
-​	Through the above fusion strategy, the model can automatically select the most discriminative direction among features in different directions for focused attention, and at the same time fuse beneficial information from other directions, enhancing the model's adaptability to complex face recognition tasks.
+​  Through the above fusion strategy, the model can automatically select the most discriminative direction among features in different directions for focused attention, and at the same time fuse beneficial information from other directions, enhancing the model's adaptability to complex face recognition tasks.
 
 ### 3.5 SE channel attention mechanism
 
-​	The SE channel attention mechanism is embedded in the Bottleneck module and the feature fusion stage. In the Bottleneck module, the SE module performs channel weighting on the features extracted by convolution, enhancing the expression of important features. In the feature fusion stage, SEBlock1D is used to perform adaptive weighted fusion on multi-directional features, achieving effective integration of multi-directional features.
+​  The SE channel attention mechanism is embedded in the Bottleneck module and the feature fusion stage. In the Bottleneck module, the SE module performs channel weighting on the features extracted by convolution, enhancing the expression of important features. In the feature fusion stage, SEBlock1D is used to perform adaptive weighted fusion on multi-directional features, achieving effective integration of multi-directional features.
 
 ## 4 experiment
 
 ### 4.1 dataset
 
-The dataset used in this study totaled ** 15,000 ** labeled face images, of which the ratio of AI-generated images to real images was basically maintained at 1:1. To make full use of the data and verify the generalization ability of the model, we adopted the following data partitioning strategies:
+  The dataset used in this study totaled ** 15,000 ** labeled face images, of which the ratio of AI-generated images to real images was basically maintained at 1:1. To make full use of the data and verify the generalization ability of the model, we adopted the following data partitioning strategies:
 
 - **Division of training set and test set**：First, divide the total data set into a training set and a test set in an 8:2 ratio.
 - ** Training dataset and validation set division **: The divided training dataset is further divided into the final training dataset and validation set in a 9:1 ratio.
@@ -265,11 +265,11 @@ To verify the impact of each module on model performance, we conducted multiple 
 7. ** ResNet50 + ViT + ASPP (ASPP after ViT) **: Embed ViT first, then use the ASPP module.
 8. ** ResNet50 + ASPCrossScanViT **: Based on model 6, multi-directional serialized inputs and a new feature fusion mechanism are introduced.
 
-In these experiments, we focus on the influence of multi-directional serialization input and feature fusion mechanism. This mechanism is reflected in the ResNet50_Dilated_ASPPCrossScanViT class of the model code, and the effective fusion of multi-directional features is achieved by introducing the Cross Scan operation and the FeatureFusion module.
+  In these experiments, we focus on the influence of multi-directional serialization input and feature fusion mechanism. This mechanism is reflected in the ResNet50_Dilated_ASPPCrossScanViT class of the model code, and the effective fusion of multi-directional features is achieved by introducing the Cross Scan operation and the FeatureFusion module.
 
 #### 4.3.2 loss function
 
-During training, a ** weighted cross entropy loss function ** ('nn. CrossEntropyLoss') was used. Since there may be class imbalances in our dataset, a weighted approach is better able to handle this situation. The class weights are set to equal, i.e. each class has a weight of 1.
+  During training, a ** weighted cross entropy loss function ** ('nn. CrossEntropyLoss') was used. Since there may be class imbalances in our dataset, a weighted approach is better able to handle this situation. The class weights are set to equal, i.e. each class has a weight of 1.
 
 ```python
 class_weights = torch.tensor([1.0] * num_classes).to(device)
@@ -319,11 +319,11 @@ We trained and evaluated the above eight models, and the results are shown in Ta
 | ResNet50 + ViT + ASPP(ASPP after ViT) | 98.2937     | 0.0889     |
 | ResNet50 + ASPPCrossScanViT           | **98.3730** | **0.0716** |
 
-The experimental results demonstrate that the introduction of dilated convolutions and the ASPP module effectively enhances the model's performance. After embedding the ViT module, the model's ability to capture global dependencies is strengthened, leading to further improvement in accuracy. In particular, the model incorporating multi-directional serialized inputs and the novel feature fusion mechanism (ResNet50 + ASPCrossScanViT) achieves the best performance. This validates the effectiveness of our proposed improvements.
+  The experimental results demonstrate that the introduction of dilated convolutions and the ASPP module effectively enhances the model's performance. After embedding the ViT module, the model's ability to capture global dependencies is strengthened, leading to further improvement in accuracy. In particular, the model incorporating multi-directional serialized inputs and the novel feature fusion mechanism (ResNet50 + ASPCrossScanViT) achieves the best performance. This validates the effectiveness of our proposed improvements.
 
 ## 5 conclusion
 
-    This paper proposes a multi-scale face recognition model based on improved ResNet50 and ViT. By introducing dilated convolution and the ASPP module, the model can effectively capture multi-scale feature information. The improved ViT module enhances the model's ability to capture global and multi-directional features through the Cross Scan operation and feature fusion mechanism. Multiple sets of ablation experiments verify the contribution of each module to the model's performance. Experimental results show that this model has achieved excellent performance in complex face recognition tasks and has high practical application value.
+  This paper proposes a multi-scale face recognition model based on improved ResNet50 and ViT. By introducing dilated convolution and the ASPP module, the model can effectively capture multi-scale feature information. The improved ViT module enhances the model's ability to capture global and multi-directional features through the Cross Scan operation and feature fusion mechanism. Multiple sets of ablation experiments verify the contribution of each module to the model's performance. Experimental results show that this model has achieved excellent performance in complex face recognition tasks and has high practical application value.
 
 ## 6 References
 
@@ -343,4 +343,4 @@ The experimental results demonstrate that the introduction of dilated convolutio
 
 ## 7 Supplementary Note
 
-    This work advanced to the national finals of the 2024 Sixth Global Campus Artificial Intelligence Algorithm Elite Competition. However, due to a submission error—only the official test set results were submitted, while the code and weights were not successfully uploaded—the final outcome was less than satisfactory. The code and weights are now open-sourced here as a cautionary reference.
+  This work advanced to the national finals of the 2024 Sixth Global Campus Artificial Intelligence Algorithm Elite Competition. However, due to a submission error—only the official test set results were submitted, while the code and weights were not successfully uploaded—the final outcome was less than satisfactory. The code and weights are now open-sourced here as a cautionary reference.
