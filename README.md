@@ -44,11 +44,11 @@
 
   The ASPP module is composed of multiple atrous convolutions with different dilation rates and a global average pooling layer, including:
 
-- ** 1 × 1 convolution with expansion rate of 1 **
-- ** 3 × 3 convolution with expansion rate of 3 **
-- ** 3 × 3 convolution with expansion rate of 5 **
-- ** 3 × 3 convolution with expansion rate of 7 **
-- ** Global Average Pooling Layer **
+- **1 × 1 convolution with expansion rate of 1**
+- **3 × 3 convolution with expansion rate of 3**
+- **3 × 3 convolution with expansion rate of 5**
+- **3 × 3 convolution with expansion rate of 7**
+- **Global Average Pooling Layer**
 
   The outputs of each branch are concatenated in the channel dimension, and then fused through 1×1 convolution and Batch Normalization. Finally, it passes through the ReLU activation function. The ASPP module can effectively capture features of different scales and improve the model's ability to recognize multi-scale targets.
 
@@ -92,18 +92,18 @@ class ASPP(nn.Module):
 
 The traditional Vision Transformer (ViT) mainly has the following disadvantages when processing images.
 
-** Insufficient direction invariance **: When traditional ViT divides the image into fixed-size patches and serializes them in row priority order, it lacks sufficient robustness to the direction changes such as rotation and flip of the image. This is in practical applications, especially in facial recognition tasks, face images with various poses and angles may be encountered, and traditional ViT is difficult to effectively cope with these changes.
+**Insufficient direction invariance**: When traditional ViT divides the image into fixed-size patches and serializes them in row priority order, it lacks sufficient robustness to the direction changes such as rotation and flip of the image. This is in practical applications, especially in facial recognition tasks, face images with various poses and angles may be encountered, and traditional ViT is difficult to effectively cope with these changes.
 
 
-In order to solve the above problems, we introduce the ** Cross Scan ** operation to transform the feature map in multiple directions, including:
+In order to solve the above problems, we introduce the **Cross Scan** operation to transform the feature map in multiple directions, including:
 
-1. ** Original direction **: that is, normal line priority scanning.
+1. **Original direction**: that is, normal line priority scanning.
 
-2. ** Horizontal and Vertical Flip **: Flip the feature map horizontally and vertically.
+2. **Horizontal and Vertical Flip**: Flip the feature map horizontally and vertically.
 
 3. Transpose of the feature map: Swap the height and width of the feature map.
    
-4. ** Flip after transposition **: Flip the transposed feature map horizontally and vertically.
+4. **Flip after transposition**: Flip the transposed feature map horizontally and vertically.
 
    ```python
    def cross_scan(x):
@@ -149,7 +149,7 @@ class PatchEmbedding(nn.Module):
 
 #### 3.4.3 Feature fusion mechanism
 
-After obtaining the feature sequences of the four directions, we need to fuse them. To this end, we design a feature fusion mechanism based on ** FeatureFusion **. The specific steps are as follows:
+After obtaining the feature sequences of the four directions, we need to fuse them. To this end, we design a feature fusion mechanism based on **FeatureFusion**. The specific steps are as follows:
 
 1. **Global Feature Extraction**: The global average pooling of the feature maps in each direction is performed to obtain the global feature representation in each direction, with a shape of $[B, D, C] $, where $B $is the batch size, $D = 4 $is the number of directions, and $C $is the number of channels.
 
@@ -210,16 +210,16 @@ class FeatureFusion(nn.Module):
 
 ### 4.1 dataset
 
-  The dataset used in this study totaled ** 15,000 ** labeled face images, of which the ratio of AI-generated images to real images was basically maintained at 1:1. To make full use of the data and verify the generalization ability of the model, we adopted the following data partitioning strategies:
+  The dataset used in this study totaled **15,000** labeled face images, of which the ratio of AI-generated images to real images was basically maintained at 1:1. To make full use of the data and verify the generalization ability of the model, we adopted the following data partitioning strategies:
 
 - **Division of training set and test set**：First, divide the total data set into a training set and a test set in an 8:2 ratio.
-- ** Training dataset and validation set division **: The divided training dataset is further divided into the final training dataset and validation set in a 9:1 ratio.
+- **Training dataset and validation set division**: The divided training dataset is further divided into the final training dataset and validation set in a 9:1 ratio.
 
 ### 4.2 data preprocessing
 
 Data preprocessing is crucial for training deep learning models. We performed the following preprocessing steps on the image data:
 
-- ** Maintain aspect ratio scaling **: Use a custom ResizeWithAspectRatio class to scale the image to the specified maximum size (e.g. 1024 pixels) while keeping the original aspect ratio unchanged. This class is defined in the dataset code to calculate the scaling ratio to ensure that the maximum edge length of the image does not exceed the set value while avoiding image distortion.
+- **Maintain aspect ratio scaling**: Use a custom ResizeWithAspectRatio class to scale the image to the specified maximum size (e.g. 1024 pixels) while keeping the original aspect ratio unchanged. This class is defined in the dataset code to calculate the scaling ratio to ensure that the maximum edge length of the image does not exceed the set value while avoiding image distortion.
 
   ```python
   class ResizeWithAspectRatio:
@@ -235,7 +235,7 @@ Data preprocessing is crucial for training deep learning models. We performed th
           return img
   ```
 
-- ** Data enhancement **: During the training process, we performed data enhancement operations such as random horizontal flipping and random cropping on the image to improve the generalization ability of the model.
+- **Data enhancement**: During the training process, we performed data enhancement operations such as random horizontal flipping and random cropping on the image to improve the generalization ability of the model.
 
   ```python
   transform = transforms.Compose([
@@ -248,7 +248,7 @@ Data preprocessing is crucial for training deep learning models. We performed th
   ])
   ```
 
-- ** Normalization **: Normalize the image using the mean and standard deviation of ImageNet to ensure that the distribution of the input data is consistent with the training data of the pre-trained model.
+- **Normalization**: Normalize the image using the mean and standard deviation of ImageNet to ensure that the distribution of the input data is consistent with the training data of the pre-trained model.
 
 ### 4.3 Experimental setup
 
@@ -256,20 +256,20 @@ Data preprocessing is crucial for training deep learning models. We performed th
 
 To verify the impact of each module on model performance, we conducted multiple sets of ablation experiments. There are a total of eight models, including:
 
-1. ** ResNet50 ** (Baseline): Use the original ResNet50 model as a baseline.
-2. ** ResNet50 + empty convolution **: Introduce empty convolution in ResNet50 to expand the receptive field.
-3. ** ResNet50 + ViT **: Embed the ViT module on the basis of ResNet50 to capture global dependencies.
-4. ** ResNet50 + ASPP **: Upgrade empty convolution to ASPP module to improve the diversity of feature extraction.
-5. ** ResNet50 + empty convolution + ViT **: Combine empty convolution and ViT to further improve model performance.
-6. ** ResNet50 + ASPP + ViT (ASPP before ViT) **: Use the ASPP module first, then embed the ViT.
-7. ** ResNet50 + ViT + ASPP (ASPP after ViT) **: Embed ViT first, then use the ASPP module.
-8. ** ResNet50 + ASPCrossScanViT **: Based on model 6, multi-directional serialized inputs and a new feature fusion mechanism are introduced.
+1. **ResNet50** (Baseline): Use the original ResNet50 model as a baseline.
+2. **ResNet50 + empty convolution**: Introduce empty convolution in ResNet50 to expand the receptive field.
+3. **ResNet50 + ViT**: Embed the ViT module on the basis of ResNet50 to capture global dependencies.
+4. **ResNet50 + ASPP**: Upgrade empty convolution to ASPP module to improve the diversity of feature extraction.
+5. **ResNet50 + empty convolution + ViT**: Combine empty convolution and ViT to further improve model performance.
+6. **ResNet50 + ASPP + ViT (ASPP before ViT)**: Use the ASPP module first, then embed the ViT.
+7. **ResNet50 + ViT + ASPP (ASPP after ViT)**: Embed ViT first, then use the ASPP module.
+8. **ResNet50 + ASPCrossScanViT**: Based on model 6, multi-directional serialized inputs and a new feature fusion mechanism are introduced.
 
   In these experiments, we focus on the influence of multi-directional serialization input and feature fusion mechanism. This mechanism is reflected in the ResNet50_Dilated_ASPPCrossScanViT class of the model code, and the effective fusion of multi-directional features is achieved by introducing the Cross Scan operation and the FeatureFusion module.
 
 #### 4.3.2 loss function
 
-  During training, a ** weighted cross entropy loss function ** ('nn. CrossEntropyLoss') was used. Since there may be class imbalances in our dataset, a weighted approach is better able to handle this situation. The class weights are set to equal, i.e. each class has a weight of 1.
+  During training, a **weighted cross entropy loss function** ('nn. CrossEntropyLoss') was used. Since there may be class imbalances in our dataset, a weighted approach is better able to handle this situation. The class weights are set to equal, i.e. each class has a weight of 1.
 
 ```python
 class_weights = torch.tensor([1.0] * num_classes).to(device)
@@ -278,13 +278,13 @@ criterion = nn.CrossEntropyLoss(weight=class_weights)
 
 #### 4.3.3 Optimizer and Learning Rate Scheduling
 
-- ** Optimizer **: AdamW optimizer [6] is adopted with an initial learning rate of 2e-4 and a weight decay coefficient of 1e-4. AdamW adds weight decay on top of Adam, which helps prevent overfitting.
+- **Optimizer**: AdamW optimizer [6] is adopted with an initial learning rate of 2e-4 and a weight decay coefficient of 1e-4. AdamW adds weight decay on top of Adam, which helps prevent overfitting.
 
   ```python
   optimizer = optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-4)
   ```
 
-- ** Learning Rate Scheduler **: Use the ** Cosine Annealing Learning Rate Scheduler ** ('CosineAnnealing LR') with the T_max set to 60 and the minimum learning rate set to 1e-6. The scheduler is able to gradually reduce the learning rate during training to avoid falling into local optima.
+- **Learning Rate Scheduler**: Use the **Cosine Annealing Learning Rate Scheduler** ('CosineAnnealing LR') with the T_max set to 60 and the minimum learning rate set to 1e-6. The scheduler is able to gradually reduce the learning rate during training to avoid falling into local optima.
 
   ```python
   scheduler = CosineAnnealingLR(optimizer, T_max=60, eta_min=1e-6)
@@ -292,15 +292,15 @@ criterion = nn.CrossEntropyLoss(weight=class_weights)
 
 #### 4.3.4 training strategy
 
-- ** Distributed training **: Supports multi-GPU distributed training, uses DistributedDataParallel to parallelize the model and speed up the training process.
-- ** Early stop mechanism **: Set the number of early stop rounds to 20. If the validation set accuracy does not improve within 20 consecutive epochs, stop training in advance to prevent overfitting.
-- ** batch size **: The batch size for training and verification is set to 32.
-- ** Logging **: Use the'logging 'module and'TensorBoard' to record the loss, accuracy and other indicators during the training process for later analysis.
+- **Distributed training**: Supports multi-GPU distributed training, uses DistributedDataParallel to parallelize the model and speed up the training process.
+- **Early stop mechanism**: Set the number of early stop rounds to 20. If the validation set accuracy does not improve within 20 consecutive epochs, stop training in advance to prevent overfitting.
+- **batch size**: The batch size for training and verification is set to 32.
+- **Logging**: Use the'logging 'module and'TensorBoard' to record the loss, accuracy and other indicators during the training process for later analysis.
 
 #### 4.3.5 Hardware and software environment
 
-- ** Hardware Environment **: Training with 1 or more NVIDIA RTX4090D
-- ** Software Environment **: Python 3.8, PyTorch 2.0
+- **Hardware Environment**: Training with 1 or more NVIDIA RTX4090D
+- **Software Environment**: Python 3.8, PyTorch 2.0
 
 ### 4.4 experimental results
 
