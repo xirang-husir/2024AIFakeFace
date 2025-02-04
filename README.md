@@ -343,4 +343,4 @@ We trained and evaluated the above eight models, and the results are shown in Ta
 
 ## 7 Supplementary Note
 
-  This work advanced to the national finals of the 2024 Sixth Global Campus Artificial Intelligence Algorithm Elite Competition. However, due to a submission error—only the official test set results were submitted, while the code and weights were not successfully uploaded—the final outcome was less than satisfactory. The code and weights are now open-sourced here as a cautionary reference.
+  This work advanced to the national finals of the 2024 Sixth Global Campus Artificial Intelligence Algorithm Elite Competition. However, due to a submission error: only the official test set results were submitted, while the code and weights were not successfully uploaded(the final outcome was less than satisfactory). The code and weights are now open-sourced here as a cautionary reference.
