@@ -1,12 +1,12 @@
 ##                            Multi-scale face recognition model based on CrossScanViT+Resnet: A Competition Method Report
 
-## 摘要
+## Abstract
 
     This paper proposes a hybrid model for multi-scale face recognition based on the combination of ResNet50 and an improved Vision Transformer (ViT). By introducing ViT on the basis of ResNet50 to capture the global dependencies of images and improving ViT. To extract deep-level features, dilated convolution and the ASPP module are introduced to capture multi-scale information of images. Finally, the SE channel attention mechanism is used to fuse features. We conducted multiple sets of ablation experiments to verify the impact of each module on model performance. The experimental results show that this model has achieved excellent performance in complex face recognition tasks.
 
 **keywords**：ResNet50, Vision Transformer, ASPP, Dilated convolution, SE, Face recognition
 
-## 1 引言
+## 1 Introduction
 
 ​	As an important research direction in the field of computer vision, face recognition is widely used in fields such as security monitoring, identity verification, and human-computer interaction. However, due to factors such as illumination changes, pose changes, and occlusion, the face recognition task still faces many challenges. The rise of deep learning provides new ideas for solving these problems. Convolutional neural networks (CNNs) perform excellently in extracting local features, while the self-attention mechanism has advantages in capturing global dependencies. How to effectively combine these two methods to build a high-performance face recognition model is a current research hotspot.
 
