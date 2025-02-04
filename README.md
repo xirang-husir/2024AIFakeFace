@@ -1,56 +1,56 @@
-##                            基于CrossScanViT+Resnet的多尺度人脸识别模型
+##                            Multi-scale face recognition model based on CrossScanViT+Resnet: A Competition Method Report
 
 ## 摘要
 
-​	本文提出了一种基于ResNet50和改进的Vision Transformer (ViT) 相结合的多尺度人脸识别的混合模型。通过在ResNet50的基础上引入ViT，以捕获图像的全局依赖关系，并对ViT进行了改进。为了提取深层次的特征，引入了空洞卷积和ASPP模块，以捕获图像的多尺度信息。最后，使用SE通道注意力机制对特征进行融合。我们进行了多组消融实验，验证了各个模块对模型性能的影响。实验结果表明，该模型在复杂的人脸识别任务中取得了优异的性能。
+    This paper proposes a hybrid model for multi-scale face recognition based on the combination of ResNet50 and an improved Vision Transformer (ViT). By introducing ViT on the basis of ResNet50 to capture the global dependencies of images and improving ViT. To extract deep-level features, dilated convolution and the ASPP module are introduced to capture multi-scale information of images. Finally, the SE channel attention mechanism is used to fuse features. We conducted multiple sets of ablation experiments to verify the impact of each module on model performance. The experimental results show that this model has achieved excellent performance in complex face recognition tasks.
 
-**关键词**：ResNet50，Vision Transformer，ASPP，空洞卷积，SE注意力机制，人脸识别
+**keywords**：ResNet50, Vision Transformer, ASPP, Dilated convolution, SE, Face recognition
 
 ## 1 引言
 
-​	人脸识别作为计算机视觉领域的重要研究方向，广泛应用于安全监控、身份验证和人机交互等领域。然而，受光照变化、姿态变化和遮挡等因素的影响，人脸识别任务仍然面临诸多挑战。深度学习的兴起为解决这些问题提供了新的思路。卷积神经网络（CNN）在提取局部特征方面表现卓越，而自注意力机制在捕获全局依赖关系方面具有优势。如何有效地结合这两种方法，构建一个高性能的人脸识别模型，是当前研究的热点。
+​	As an important research direction in the field of computer vision, face recognition is widely used in fields such as security monitoring, identity verification, and human-computer interaction. However, due to factors such as illumination changes, pose changes, and occlusion, the face recognition task still faces many challenges. The rise of deep learning provides new ideas for solving these problems. Convolutional neural networks (CNNs) perform excellently in extracting local features, while the self-attention mechanism has advantages in capturing global dependencies. How to effectively combine these two methods to build a high-performance face recognition model is a current research hotspot.
 
-​	本文在ResNet50的基础上，结合改进的ViT模型，引入空洞卷积和ASPP模块，利用SE通道注意力机制进行特征融合，提出了一种新的人脸识别模型。通过多组消融实验，验证了各个模块对模型性能的贡献。该模型充分利用了局部和全局特征信息，提高了人脸识别的准确率。
+​	Based on ResNet50, this approach combines an improved ViT model, introduces dilated convolution and ASPP modules, and uses the SE channel attention mechanism for feature fusion to propose a new face recognition model. Through multiple sets of ablation experiments, the contributions of each module to the model performance are verified. This model makes full use of local and global feature information and improves the accuracy of face recognition.
 
-## 2 相关工作
+## 2 Related work
 
 ### 2.1 ResNet50
 
-​	ResNet [1] 通过引入残差结构，成功训练了深度达152层的神经网络。ResNet50是其中一种经典的网络结构，具有较强的特征提取能力。其残差模块使得网络能够更有效地训练，更深层次地提取图像特征。
+​	ResNet [1] successfully trained neural networks with a depth of 152 layers by introducing a residual structure. ResNet50 is one of the classic network structures with strong feature extraction capabilities. Its residual module enables the network to train more effectively and extract image features at a deeper level.
 
-### 2.2 空洞卷积和ASPP
+### 2.2 Dilated convolution and ASPP
 
-​	空洞卷积 [2] 通过在卷积核中引入空洞（dilation），扩大了感受野而不增加参数量。ASPP（Atrous Spatial Pyramid Pooling）模块 [3] 结合了不同膨胀率的空洞卷积，能够捕获多尺度的上下文信息，提升了模型对不同尺度目标的识别能力。
+​	Dilated convolutions [2] expand the receptive field without increasing the number of parameters by introducing holes (dilations) into the convolutional kernel. The ASPP (Atrous Spatial Pyramid Pooling) module [3] combines dilated convolutions with different dilation rates, enabling the capture of multi-scale contextual information and enhancing the model's ability to recognize objects of varying scales.
 
 ### 2.3 Vision Transformer (ViT)
 
-​	ViT [4] 将Transformer架构引入到计算机视觉领域，将图像分割成固定大小的patch，然后将其展平成序列，输入到Transformer中。ViT在图像分类任务中取得了与CNN相当甚至更好的性能，证明了自注意力机制在视觉任务中的有效性。
+​	ViT [4] introduces the Transformer architecture into the field of computer vision by dividing an image into fixed-size patches, which are then flattened into a sequence and fed into the Transformer. ViT has achieved performance comparable to or even better than CNNs in image classification tasks, demonstrating the effectiveness of the self-attention mechanism in visual tasks.
 
-### 2.4 SE通道注意力机制
+### 2.4 SE Channel attention mechanism
 
-​	Squeeze-and-Excitation (SE) 网络 [5] 提出了通道注意力机制，通过自适应地为每个通道分配权重，增强了重要特征的表达，抑制了无关特征，提高了模型的性能。
+​	The Squeeze-and-Excitation (SE) network [5] introduces a channel attention mechanism that adaptively assigns weights to each channel, enhancing the representation of important features while suppressing irrelevant ones, thereby improving the overall performance of the model.
 
-## 3 方法
+## 3 Method
 
-### 3.1 模型架构概述
+### 3.1 Overview of model architecture
 
-​	首先，输入图像经过ResNet50的卷积层和池化层，提取初步的特征。然后，引入空洞卷积的Bottleneck模块，扩大感受野，提取深层次特征。接下来，使用ASPP模块捕获多尺度的上下文信息。随后，通过改进的ViT模块，捕获全局依赖关系，并引入多方向序列化输入和新的特征融合机制处理多方向的输入。最后，使用SE通道注意力机制，对特征进行融合，并通过全连接层输出分类结果。
+​	First, the input image passes through the convolutional and pooling layers of ResNet50 to extract preliminary features. Then, a Bottleneck module with dilated convolutions is introduced to expand the receptive field and extract deeper features. Next, the ASPP module is used to capture multi-scale contextual information. Subsequently, an improved ViT module is employed to capture global dependencies, and a multi-directional serialized input along with a novel feature fusion mechanism is introduced to process multi-directional inputs. Finally, the SE channel attention mechanism is applied to fuse the features, and the classification result is output through a fully connected layer.
 
-### 3.2 ResNet50与空洞卷积
+### 3.2 ResNet50 and dilated convolution
 
-​	ResNet50由多个Bottleneck模块组成，每个模块包含三个卷积层。为了扩大感受野，我们在**ResNet50的第三和第四个层级中引入了空洞卷积**，将部分卷积层的步幅（stride）设置为1，膨胀率（dilation）设置为自定义的值。这种方式能够在不增加参数量的情况下，扩大感受野，获取更多的上下文信息。
+​	ResNet50 is composed of multiple Bottleneck modules, each containing three convolutional layers. To expand the receptive field, we introduced dilated convolutions in the third and fourth stages of ResNet50, setting the stride of some convolutional layers to 1 and the dilation rate to a custom value. This approach allows for an enlarged receptive field and the acquisition of more contextual information without increasing the number of parameters.
 
-### 3.3 ASPP模块
+### 3.3 ASPP moudle
 
-ASPP模块由多个不同膨胀率的空洞卷积和一个全局平均池化层组成，包括：
+The ASPP module is composed of multiple atrous convolutions with different dilation rates and a global average pooling layer, including:
 
-- **膨胀率为1的1×1卷积**
-- **膨胀率为3的3×3卷积**
-- **膨胀率为5的3×3卷积**
-- **膨胀率为7的3×3卷积**
-- **全局平均池化层**
+- ** 1 × 1 convolution with expansion rate of 1 **
+- ** 3 × 3 convolution with expansion rate of 3 **
+- ** 3 × 3 convolution with expansion rate of 5 **
+- ** 3 × 3 convolution with expansion rate of 7 **
+- ** Global Average Pooling Layer **
 
-各个分支的输出在通道维度上进行拼接，然后通过1×1卷积和Batch Normalization进行融合，最后经过ReLU激活函数。ASPP模块能够有效地捕获不同尺度的特征，提高模型对多尺度目标的识别能力。
+The outputs of each branch are concatenated in the channel dimension, and then fused through 1×1 convolution and Batch Normalization. Finally, it passes through the ReLU activation function. The ASPP module can effectively capture features of different scales and improve the model's ability to recognize multi-scale targets.
 
 ```python
 class ASPP(nn.Module):
@@ -86,53 +86,47 @@ class ASPP(nn.Module):
 
 
 
-### 3.4 改进的ViT模块
+### 3.4 Improved ViT module
 
-#### 3.4.1 Cross Scan操作
+#### 3.4.1 Cross Scan[7]
 
-传统的Vision Transformer（ViT）在处理图像时，主要存在以下劣势：
+The traditional Vision Transformer (ViT) mainly has the following disadvantages when processing images.
 
-1. **方向不变性不足**：传统ViT在将图像划分为固定大小的patch并按行优先顺序序列化时，对图像的旋转、翻转等方向变化缺乏足够的鲁棒性。这在实际应用中，尤其是人脸识别任务中，可能会遇到各种姿态和角度的人脸图像，传统ViT难以有效应对这些变化。
+1. ** Insufficient direction invariance **: When traditional ViT divides the image into fixed-size patches and serializes them in row priority order, it lacks sufficient robustness to the direction changes such as rotation and flip of the image. This is in practical applications, especially in facial recognition tasks, face images with various poses and angles may be encountered, and traditional ViT is difficult to effectively cope with these changes.
 
 
-为了解决上述问题，我们引入了**Cross Scan**操作，对特征图进行多方向的变换，具体包括：
+In order to solve the above problems, we introduce the ** Cross Scan ** operation to transform the feature map in multiple directions, including:
 
-1. **原始方向**：即正常的行优先扫描。
+1. ** Original direction **: that is, normal line priority scanning.
 
-2. **水平和垂直翻转**：对特征图进行水平和垂直方向的翻转。
+2. ** Horizontal and Vertical Flip **: Flip the feature map horizontally and vertically.
 
-3. **特征图的转置**：将特征图的高度和宽度进行交换。
-
-4. **转置后的翻转**：对转置后的特征图再进行水平和垂直翻转。
+3. Transpose of the feature map: Swap the height and width of the feature map.
+   
+4. ** Flip after transposition **: Flip the transposed feature map horizontally and vertically.
 
    ```python
    def cross_scan(x):
-       # x: [B, C, H, W]
        directions = []
-       # 1. 原始方向
        directions.append(x)
-       # 2. 同时水平和垂直翻转
-       flipped = torch.flip(x, dims=[2, 3])  # 翻转高度和宽度
+       flipped = torch.flip(x, dims=[2, 3]) 
        directions.append(flipped)
-       # 3. 转置特征图（交换高度和宽度）
        transposed = x.transpose(2, 3)
        directions.append(transposed)
-       # 4. 转置后再水平和垂直翻转
        transposed_flipped = flipped.transpose(2, 3)
        directions.append(transposed_flipped)
-       return torch.stack(directions, dim=1)  # [B, 4, C, H, W]
+       return torch.stack(directions, dim=1) 
    ```
 
-通过这种多方向的序列化方式，模型能够从不同角度捕捉图像的特征信息，增强对方向变化的鲁棒性。此外，多方向序列化输入可以有效提高特征的多样性和丰富性，弥补传统ViT在方向不变性和特征融合上的不足。
+Through this multi-directional serialization approach, the model is capable of capturing feature information of images from various perspectives, thereby enhancing robustness to directional changes. Moreover, multi-directional serialized inputs can effectively increase the diversity and richness of features, addressing the shortcomings of traditional Vision Transformers (ViT) in terms of directional invariance and feature fusion.
 
 ```reStructuredText
-我们在中间层嵌入 ViT，模型提取局部特征后，捕获全局关系，再通过深层卷积进行特征增强。
-高效性：相比于在浅层嵌入 ViT，这样的方式减少了计算量，同时保留了足够的特征表示能力。
+We embed ViT in the middle layer. After the model extracts local features, it captures global relationships and enhances the features through deep convolution. Efficiency: Compared with embedding ViT in shallow layers, this method reduces the amount of computation while retaining enough feature representation capabilities.
 ```
 
-#### 3.4.2 特征序列化与位置编码
+#### 3.4.2 Feature serialization and position encoding
 
-​	对于每个方向的特征图，使用卷积操作进行Patch Embedding，将其转换为序列形式。具体而言，使用一个卷积核大小为`patch_size`的卷积层，将特征图转换为指定维度的嵌入表示。由于输入图像的尺寸可能不同，序列的长度也会变化，因此在每次前向传播时，根据当前序列的长度动态生成位置编码，保证位置编码与序列长度匹配。
+​	For the feature map in each direction, the convolutional operation is used for Patch Embedding to convert it into a sequence form. Specifically, a convolutional layer with a convolutional kernel size of patch_size is used to convert the feature map into an embedded representation of the specified dimension. Since the size of the input image may be different, the length of the sequence will also change. Therefore, on each forward propagation, the position code is dynamically generated according to the length of the current sequence to ensure that the position code matches the length of the sequence.
 
 ```python
 class PatchEmbedding(nn.Module):
@@ -140,7 +134,6 @@ class PatchEmbedding(nn.Module):
         super(PatchEmbedding, self).__init__()
         self.patch_size = patch_size
         self.proj = nn.Conv2d(in_channels, embed_dim, kernel_size=patch_size, stride=patch_size)
-        # 计算序列长度
         self.num_patches = None
 
     def forward(self, x):
@@ -154,37 +147,36 @@ class PatchEmbedding(nn.Module):
 
 
 
-#### 3.4.3 特征融合机制
+#### 3.4.3 Feature fusion mechanism
 
-获得四个方向的特征序列后，需要将其进行融合。为此，我们设计了一个基于**FeatureFusion**的特征融合机制，具体步骤如下：
+After obtaining the feature sequences of the four directions, we need to fuse them. To this end, we design a feature fusion mechanism based on ** FeatureFusion **. The specific steps are as follows:
 
-1. **全局特征提取**：对每个方向的特征图进行全局平均池化，得到每个方向的全局特征表示，形状为$[B, D, C]$，其中$B$为批量大小，$D=4$为方向数，$C$为通道数。
+1. **Global Feature Extraction**: The global average pooling of the feature maps in each direction is performed to obtain the global feature representation in each direction, with a shape of $[B, D, C] $, where $B $is the batch size, $D = 4 $is the number of directions, and $C $is the number of channels.
 
-2. **特征展开与权重生成**：将四个方向的全局特征展平成$[B, 4C]$的向量，输入到FeatureFusion中，生成对应的权重$[B, 4C]$。FeatureFusion的具体操作为：
+2. **Feature expansion and weight generation**：Flatten the global features in the four directions into a vector of $[B, 4C] $, enter it into FeatureFusion, and generate the corresponding weight $[B, 4C] $. The specific operation of FeatureFusion is:
 
-   - **全连接层1**：将输入的$[B, 4C]$降维到$[B, \frac{4C}{r}]$，其中$r$为缩放系数（如16）。
-   - **ReLU激活**：引入非线性。
-   - **全连接层2**：将特征升维回$[B, 4C]$。
-   - **Sigmoid激活**：将权重限制在0到1之间。
+   - **Fully connected layer 1**：Reduces the dimension of the input $[B, 4C] $to $[B,\ frac {4C} {r}] $, where $r $is the scaling factor.
+   - **ReLU activation**：Introduce nonlinearity.
+   - **Fully connected layer 2**：Updimension the feature back to $[B, 4C] $.
+   - **Sigmoid activation**：Limit the weight to be between 0 and 1.
 
-3. **权重重塑**：将权重重新变形为$[B, 4, C]$，对应于每个方向的通道权重。
+3. **Weight reshaping**：Reshape the weights to $[B, 4, C] $, corresponding to the channel weights in each direction.
 
-4. **方向权重计算**：对每个方向的权重在通道维度上求平均，得到$[B, 4]$的方向权重。
+4. **Direction weight calculation**：The weights in each direction are averaged over the channel dimension to obtain the direction weights of $[B, 4] $.
 
-5. **最大权重方向选择**：对于每个样本，选择具有最大平均权重的方向索引$i_{\text{max}}$。
+5. **Maximum weight direction selection**：For each sample, choose the directional index $i_ {\ text {max}} $with the largest average weight.
 
 6. **特征融合**：
 
-   对于每个方向$i$，计算加权特征：
+  For each direction $i$, calculate the weighted feature.
 
-   - 如果$i = i_{\text{max}}$，则直接采用该方向的特征，即$fused\_x += x_c[:, i, :]$。
-   - 如果$i \neq i_{\text{max}}$，则将该方向的特征乘以对应的权重，再进行累加，即$fused\_x += w_c[:, i, :] * x_c[:, i, :]$。
+  - If $i = i_ {\ text {max}} $, the feature of that direction is taken directly, i.e. $fused\ _x += x_c [:, i,:] $.
+  - If $i\ neq i_ {\ text {max}} $, then multiply the feature in that direction by the corresponding weight and add it up, i.e. $fused\ _x += w_c [:, i , :] * x_c [:, i,:] $.
+Ultimately, the fused feature is expressed as $[B, C] $.
 
-最终，融合后的特征表示为$[B, C]$。
+​	The core idea of this fusion strategy is to highlight the most important directional features while retaining useful information in other directions. Through the adaptive weight allocation of FeatureFusion, the model can automatically learn the importance of each direction, enhancing the robustness and discriminative power of feature representation.
 
-​	这种融合策略的核心思想是突出最重要的方向特征，同时保留其他方向的有用信息。通过FeatureFusion的自适应权重分配，模型能够自动学习到每个方向的重要性，增强了特征表示的鲁棒性和判别力。
-
-**代码实现**：
+**code implementation**：
 
 ```python
 class FeatureFusion(nn.Module):
@@ -194,18 +186,12 @@ class FeatureFusion(nn.Module):
 
     def forward(self, x_c):
         B, D, C, H, W = x_c.shape  # x_c: [B, 4, C, H, W]
-        # 全局平均池化
         x_c = x_c.view(B, D, C, H * W).mean(dim=-1)  # [B, 4, C]
-        # 展平特征
         x_c_flat = x_c.view(B, D * C)  # [B, 4 * C]
-        # 生成权重
         w_c_flat = self.se(x_c_flat)  # [B, 4 * C]
-        # 重塑权重
         w_c = w_c_flat.view(B, D, C)  # [B, 4, C]
-        # 计算方向权重
         w_c_mean = w_c.mean(dim=2)  # [B, 4]
         _, i_max = torch.max(w_c_mean, dim=1)  # [B]
-        # 初始化融合特征
         fused_x = torch.zeros(B, C, device=x_c.device)
         for i in range(D):
             weight = w_c[:, i, :]  # [B, C]
@@ -214,28 +200,26 @@ class FeatureFusion(nn.Module):
         return fused_x  # [B, C]
 ```
 
-​	通过上述融合策略，模型能够在不同方向的特征中，自动选择最具判别力的方向进行重点关注，同时融合其他方向的有益信息，增强了模型对复杂人脸识别任务的适应性。
+​	Through the above fusion strategy, the model can automatically select the most discriminative direction among features in different directions for focused attention, and at the same time fuse beneficial information from other directions, enhancing the model's adaptability to complex face recognition tasks.
 
-### 3.5 SE通道注意力机制
+### 3.5 SE channel attention mechanism
 
-​	SE通道注意力机制被嵌入到Bottleneck模块和特征融合阶段。在Bottleneck模块中，SE模块对卷积提取的特征进行通道加权，增强了重要特征的表达。在特征融合阶段，使用SEBlock1D对多方向的特征进行自适应加权融合，实现了对多方向特征的有效整合。
+​	The SE channel attention mechanism is embedded in the Bottleneck module and the feature fusion stage. In the Bottleneck module, the SE module performs channel weighting on the features extracted by convolution, enhancing the expression of important features. In the feature fusion stage, SEBlock1D is used to perform adaptive weighted fusion on multi-directional features, achieving effective integration of multi-directional features.
 
-## 4 实验
+## 4 experiment
 
-### 4.1 数据集
+### 4.1 dataset
 
-本研究使用的数据集共计**15,000**张带有标签的人脸图像，其中AI生成的图像和真实图像比例基本保持在1：1。为了充分利用数据并验证模型的泛化能力，我们采用以下数据划分策略：
+The dataset used in this study totaled ** 15,000 ** labeled face images, of which the ratio of AI-generated images to real images was basically maintained at 1:1. To make full use of the data and verify the generalization ability of the model, we adopted the following data partitioning strategies:
 
-- **训练集和测试集划分**：首先将总的数据集按照8:2的比例划分为训练集和测试集。
-- **训练集和验证集划分**：将划分后的训练集按照9:1的比例进一步划分为最终的训练集和验证集。
+- **Division of training set and test set**：First, divide the total data set into a training set and a test set in an 8:2 ratio.
+- ** Training dataset and validation set division **: The divided training dataset is further divided into the final training dataset and validation set in a 9:1 ratio.
 
-这种划分方式确保了模型能够在足够的数据上进行训练，同时又有足够的测试数据来评估模型的性能。
+### 4.2 data preprocessing
 
-### 4.2 数据预处理
+Data preprocessing is crucial for training deep learning models. We performed the following preprocessing steps on the image data:
 
-数据预处理对于深度学习模型的训练至关重要。我们对图像数据进行了以下预处理步骤：
-
-- **保持长宽比的缩放**：使用自定义的`ResizeWithAspectRatio`类，将图像缩放到指定的最大尺寸（如1024像素），同时保持原有的长宽比不变。该类在数据集代码中定义，通过计算缩放比例，确保图像的最大边长度不超过设定值，同时避免图像失真。
+- ** Maintain aspect ratio scaling **: Use a custom ResizeWithAspectRatio class to scale the image to the specified maximum size (e.g. 1024 pixels) while keeping the original aspect ratio unchanged. This class is defined in the dataset code to calculate the scaling ratio to ensure that the maximum edge length of the image does not exceed the set value while avoiding image distortion.
 
   ```python
   class ResizeWithAspectRatio:
@@ -251,7 +235,7 @@ class FeatureFusion(nn.Module):
           return img
   ```
 
-- **数据增强**：在训练过程中，我们对图像进行了随机水平翻转、随机裁剪等数据增强操作，提高模型的泛化能力。
+- ** Data enhancement **: During the training process, we performed data enhancement operations such as random horizontal flipping and random cropping on the image to improve the generalization ability of the model.
 
   ```python
   transform = transforms.Compose([
@@ -264,107 +248,84 @@ class FeatureFusion(nn.Module):
   ])
   ```
 
-- **归一化**：使用ImageNet的均值和标准差对图像进行归一化，保证输入数据的分布与预训练模型的训练数据一致。
+- ** Normalization **: Normalize the image using the mean and standard deviation of ImageNet to ensure that the distribution of the input data is consistent with the training data of the pre-trained model.
 
-### 4.3 实验设置
+### 4.3 Experimental setup
 
-#### 4.3.1 消融实验
+#### 4.3.1 Ablation study
 
-为了验证各个模块对模型性能的影响，我们进行了多组消融实验，共计8个模型，包括：
+To verify the impact of each module on model performance, we conducted multiple sets of ablation experiments. There are a total of eight models, including:
 
-1. **ResNet50**（Baseline）：使用原始的ResNet50模型作为基线。
-2. **ResNet50 + 空洞卷积**：在ResNet50中引入空洞卷积，扩大感受野。
-3. **ResNet50 + ViT**：在ResNet50的基础上嵌入ViT模块，捕获全局依赖关系。
-4. **ResNet50 + ASPP**：将空洞卷积升级为ASPP模块，提升特征提取的多样性。
-5. **ResNet50 + 空洞卷积 + ViT**：结合空洞卷积和ViT，进一步提升模型性能。
-6. **ResNet50 + ASPP + ViT（ASPP在ViT之前）**：先使用ASPP模块，再嵌入ViT。
-7. **ResNet50 + ViT + ASPP（ASPP在ViT之后）**：先嵌入ViT，再使用ASPP模块。
-8. **ResNet50 + ASPCrossScanViT**：在模型6的基础上，引入多方向序列化输入和新的特征融合机制。
+1. ** ResNet50 ** (Baseline): Use the original ResNet50 model as a baseline.
+2. ** ResNet50 + empty convolution **: Introduce empty convolution in ResNet50 to expand the receptive field.
+3. ** ResNet50 + ViT **: Embed the ViT module on the basis of ResNet50 to capture global dependencies.
+4. ** ResNet50 + ASPP **: Upgrade empty convolution to ASPP module to improve the diversity of feature extraction.
+5. ** ResNet50 + empty convolution + ViT **: Combine empty convolution and ViT to further improve model performance.
+6. ** ResNet50 + ASPP + ViT (ASPP before ViT) **: Use the ASPP module first, then embed the ViT.
+7. ** ResNet50 + ViT + ASPP (ASPP after ViT) **: Embed ViT first, then use the ASPP module.
+8. ** ResNet50 + ASPCrossScanViT **: Based on model 6, multi-directional serialized inputs and a new feature fusion mechanism are introduced.
 
-在这些实验中，我们重点关注了**多方向序列化输入和特征融合机制**的影响。该机制在模型代码的`ResNet50_Dilated_ASPPCrossScanViT`类中有所体现，通过引入`Cross Scan`操作和`FeatureFusion`模块，实现了多方向特征的有效融合。
+In these experiments, we focus on the influence of multi-directional serialization input and feature fusion mechanism. This mechanism is reflected in the ResNet50_Dilated_ASPPCrossScanViT class of the model code, and the effective fusion of multi-directional features is achieved by introducing the Cross Scan operation and the FeatureFusion module.
 
-#### 4.3.2 损失函数
+#### 4.3.2 loss function
 
-在训练过程中，使用了**加权交叉熵损失函数**（`nn.CrossEntropyLoss`）。由于我们的数据集可能存在类别不平衡的情况，采用加权的方式能够更好地处理这种情况。类别权重设置为均等，即每个类别的权重均为1。
+During training, a ** weighted cross entropy loss function ** ('nn. CrossEntropyLoss') was used. Since there may be class imbalances in our dataset, a weighted approach is better able to handle this situation. The class weights are set to equal, i.e. each class has a weight of 1.
 
 ```python
 class_weights = torch.tensor([1.0] * num_classes).to(device)
 criterion = nn.CrossEntropyLoss(weight=class_weights)
 ```
 
-#### 4.3.3 优化器与学习率调度
+#### 4.3.3 Optimizer and Learning Rate Scheduling
 
-- **优化器**：采用AdamW优化器 [6]，初始学习率为2e-4，权重衰减系数为1e-4。AdamW在Adam的基础上，增加了权重衰减，有助于防止过拟合。
+- ** Optimizer **: AdamW optimizer [6] is adopted with an initial learning rate of 2e-4 and a weight decay coefficient of 1e-4. AdamW adds weight decay on top of Adam, which helps prevent overfitting.
 
   ```python
   optimizer = optim.AdamW(model.parameters(), lr=2e-4, weight_decay=1e-4)
   ```
 
-- **学习率调度器**：使用**余弦退火学习率调度器**（`CosineAnnealingLR`），`T_max`设置为60，最小学习率设置为1e-6。该调度器能够在训练过程中逐渐降低学习率，避免陷入局部最优。
+- ** Learning Rate Scheduler **: Use the ** Cosine Annealing Learning Rate Scheduler ** ('CosineAnnealing LR') with the T_max set to 60 and the minimum learning rate set to 1e-6. The scheduler is able to gradually reduce the learning rate during training to avoid falling into local optima.
 
   ```python
   scheduler = CosineAnnealingLR(optimizer, T_max=60, eta_min=1e-6)
   ```
 
-#### 4.3.4 训练策略
+#### 4.3.4 training strategy
 
-- **分布式训练**：支持多GPU的分布式训练，使用`DistributedDataParallel`进行模型的并行化，加速训练过程。
-- **早停机制**：设置早停轮数为20，如果验证集准确率在连续20个epoch内没有提升，则提前停止训练，防止过拟合。
-- **批量大小**：训练和验证的批量大小均设置为32。
-- **日志记录**：使用`logging`模块和`TensorBoard`记录训练过程中的损失、准确率等指标，便于后期分析。
+- ** Distributed training **: Supports multi-GPU distributed training, uses DistributedDataParallel to parallelize the model and speed up the training process.
+- ** Early stop mechanism **: Set the number of early stop rounds to 20. If the validation set accuracy does not improve within 20 consecutive epochs, stop training in advance to prevent overfitting.
+- ** batch size **: The batch size for training and verification is set to 32.
+- ** Logging **: Use the'logging 'module and'TensorBoard' to record the loss, accuracy and other indicators during the training process for later analysis.
 
-#### 4.3.5 硬件与软件环境
+#### 4.3.5 Hardware and software environment
 
-- **硬件环境**：使用多张NVIDIA GPU进行分布式训练，具体型号根据实际情况而定。
-- **软件环境**：Python 3.7或以上，PyTorch 1.9或以上，Torchvision 0.10或以上。
+- ** Hardware Environment **: Training with 1 or more NVIDIA RTX4090D
+- ** Software Environment **: Python 3.8, PyTorch 2.0
 
-### 4.4 实验结果
+### 4.4 experimental results
 
-我们对上述8个模型进行了训练和评估，结果如表1所示。（此处应插入实验结果的表格，包含各模型的准确率、损失值等指标。）
+We trained and evaluated the above eight models, and the results are shown in Table 1.
 
-**表1：不同模型的实验结果**
+**Table 1：Experimental results of different models**
 
-| 模型                                 | 准确率（%） | 损失值     |
+| models                                 | ACC（%） | LOSS     |
 | ------------------------------------ | ----------- | ---------- |
 | ResNet50（Baseline）                 | 97.6587     | 0.0855     |
-| ResNet50 + 空洞卷积                  | 96.5900     | 0.1189     |
+| ResNet50 + dilated convlution                  | 96.5900     | 0.1189     |
 | ResNet50 + ViT                       | 97.8968     | 0.0667     |
 | ResNet50 + ASPP                      | 97.8175     | 0.1008     |
-| ResNet50 + 空洞卷积 + ViT            | 98.0952     | 0.0716     |
-| ResNet50 + ASPP + ViT（ASPP在ViT前） | 98.2540     | 0.0890     |
-| ResNet50 + ViT + ASPP（ASPP在ViT后） | 98.2937     | 0.0889     |
-| ResNet50 + ASPCrossScanViT           | **98.3730** | **0.0716** |
+| ResNet50 + dilated convlution + ViT            | 98.0952     | 0.0716     |
+| ResNet50 + ASPP + ViT(ASPP before ViT) | 98.2540     | 0.0890     |
+| ResNet50 + ViT + ASPP(ASPP after ViT) | 98.2937     | 0.0889     |
+| ResNet50 + ASPPCrossScanViT           | **98.3730** | **0.0716** |
 
-从实验结果可以看出，引入空洞卷积和ASPP模块能够有效地提升模型的性能。嵌入ViT模块后，模型对全局依赖关系的捕获能力增强，准确率进一步提高。特别是引入多方向序列化输入和新的特征融合机制的模型（ResNet50 + ASPCrossScanViT），取得了最好的性能。这验证了我们提出的改进方法的有效性。
+The experimental results demonstrate that the introduction of dilated convolutions and the ASPP module effectively enhances the model's performance. After embedding the ViT module, the model's ability to capture global dependencies is strengthened, leading to further improvement in accuracy. In particular, the model incorporating multi-directional serialized inputs and the novel feature fusion mechanism (ResNet50 + ASPCrossScanViT) achieves the best performance. This validates the effectiveness of our proposed improvements.
 
-## 5 创新点
+## 5 conclusion
 
-### 5.1 改进的ViT模块
+    This paper proposes a multi-scale face recognition model based on improved ResNet50 and ViT. By introducing dilated convolution and the ASPP module, the model can effectively capture multi-scale feature information. The improved ViT module enhances the model's ability to capture global and multi-directional features through the Cross Scan operation and feature fusion mechanism. Multiple sets of ablation experiments verify the contribution of each module to the model's performance. Experimental results show that this model has achieved excellent performance in complex face recognition tasks and has high practical application value.
 
-#### 5.1.1 多方向序列化输入
-
-传统的ViT模型在处理图像时，将其划分为固定大小的patch，可能无法充分捕捉不同方向的特征。本文引入了**Cross Scan**操作，对特征图进行多方向的变换，具体包括：
-
-1. **原始方向**：即正常的行优先扫描。
-2. **水平和垂直翻转**：对特征图进行水平和垂直方向的翻转。
-3. **特征图的转置**：将特征图的高度和宽度进行交换。
-4. **转置后的翻转**：对转置后的特征图再进行水平和垂直翻转。
-
-通过这种多方向的序列化方式，模型能够从不同角度捕捉图像的特征信息，增强对方向变化的鲁棒性。这不仅提高了模型对旋转、翻转等图像变换的适应能力，还丰富了特征的多样性，有助于提升识别准确率。
-
-#### 5.1.2 特征融合机制
-
-​	设计了专门针对vision transformer的多方向序列化产生的多个特征图的FeatureFusion的特征融合机制，对不同方向的特征进行自适应加权融合。该机制利用通道注意力机制，为每个方向的特征分配权重，突出重要特征，抑制冗余信息，提高了模型的特征表示能力。
-
-### 5.2 多尺度特征提取
-
-结合空洞卷积和ASPP模块，模型能够有效地捕获不同尺度的特征信息，提高了对大小不同的人脸的识别能力。
-
-## 6 结论
-
-​	本文提出了一种基于改进的ResNet50和ViT的多尺度人脸识别模型。通过引入空洞卷积和ASPP模块，模型能够有效地捕获多尺度的特征信息。改进的ViT模块通过Cross Scan操作和特征融合机制，增强了模型对全局和多方向特征的捕获能力。多组消融实验验证了各个模块对模型性能的贡献。实验结果表明，该模型在复杂的人脸识别任务中取得了优异的性能，具有较高的实际应用价值。
-
-## 参考文献
+## References
 
 [1] He X, Cao K, Yan K, et al. Pan-mamba: Effective pan-sharpening with state space model[J]. arXiv preprint arXiv:2402.12192, 2024.
 
@@ -377,3 +338,8 @@ criterion = nn.CrossEntropyLoss(weight=class_weights)
 [5] Hu, J., Shen, L., & Sun, G. (2018). Squeeze-and-Excitation Networks. *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition*, 7132–7141.
 
 [6] Loshchilov, I., & Hutter, F. (2019). Decoupled Weight Decay Regularization. *International Conference on Learning Representations*.
+
+[7] Zhu L, Liao B, Zhang Q, et al. Vision mamba: Efficient visual representation learning with bidirectional state space model[J]. arXiv preprint arXiv:2401.09417, 2024.
+
+##Supplementary Note
+    This work advanced to the national finals of the 2024 Sixth Global Campus Artificial Intelligence Algorithm Elite Competition. However, due to a submission error—only the official test set results were submitted, while the code and weights were not successfully uploaded—the final outcome was less than satisfactory. The code and weights are now open-sourced here as a cautionary reference.
